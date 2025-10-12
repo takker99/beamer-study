@@ -1,0 +1,72 @@
+{
+  "[json][jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[latex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop",
+  },
+  "editor.formatOnSave": true,
+  "latex-workshop.bibtex-format.sort.enabled": true,
+  "latex-workshop.codespaces.portforwarding.openDelay": 20000,
+  "latex-workshop.formatting.latex": "tex-fmt",
+  // Edit the following property to change export directory
+  "latex-workshop.latex.autoClean.run": "onFailed",
+  "latex-workshop.latex.build.forceRecipeUsage": false,
+  "latex-workshop.latex.clean.args": [
+    "-r",
+    "%WORKSPACE_FOLDER%/.latexmkrc",
+    "-c",
+    "%TEX%"
+  ],
+  "latex-workshop.latex.outDir": "./dist",
+  "latex-workshop.latex.recipe.default": "lastUsed",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk",
+      "tools": [
+        "latexmk"
+      ]
+    },
+    {
+      "name": "latexmk (force)",
+      "tools": [
+        "latexmk (force rebuild)"
+      ]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "args": [
+        "-r",
+        "%WORKSPACE_FOLDER%/.latexmkrc",
+        "%DOC%"
+      ],
+      "command": "latexmk",
+      "name": "latexmk"
+    },
+    {
+      "args": [
+        "-r",
+        "%WORKSPACE_FOLDER%/.latexmkrc",
+        "-g",
+        "%DOC%"
+      ],
+      "command": "latexmk",
+      "name": "latexmk (force rebuild)"
+    }
+  ],
+  "latex-workshop.latex.watch.pdf.delay": 500,
+  "latex-workshop.linting.chktex.enabled": true,
+  "latex-workshop.linting.chktex.exec.args": [
+    "-wall",
+    "-n19", // Warning 19: You should use "’" (ASCII 39) instead of "’" (ASCII 180).
+    "-n22", // Warning 22: Comment displayed.
+    "-n30", // Warning 30: Multiple spaces detected in output.
+    // Make this warning an error
+    "-e16", // Warning 16: Mathmode still on at end of LaTeX file.
+    "-q"
+  ],
+  "latex-workshop.linting.lacheck.enabled": true,
+  "latex-workshop.synctex.afterBuild.enabled": true,
+  "latex-workshop.view.pdf.viewer": "tab"
+}

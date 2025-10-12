@@ -1,0 +1,155 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% basic settings for the use of LuaLaTeX
+\usepackage{luatexja}
+\usepackage[deluxe]{luatexja-preset}
+\renewcommand{\kanjifamilydefault}{\gtdefault} % 規定をゴシック体に
+
+% Font fallback: prefer Fira if available, otherwise fall back to Latin Modern
+\usepackage{fontspec}
+\IfFontExistsTF{Fira Sans}{%
+  % If Fira is available, set it as the sans font used by the theme
+  \setsansfont{Fira Sans}
+}{%
+  % Fallback: Latin Modern Sans (bundled with TeX Live)
+  \setsansfont{Latin Modern Sans}
+}
+
+% Note: PDF-string handling (
+% Use main.tex to disable \translate inside PDF strings when needed.
+
+% packages that I often use (arbitrary)
+\usepackage{appendixnumberbeamer} % exclude appendices from total number of pages
+\usepackage{centernot, physics}
+\usepackage{comment} % 複数行をコメントアウトする
+\usepackage{url}
+\usepackage{array, booktabs, multirow, makecell} % tabular関連
+%\usepackage{romannum} % ローマ数字
+\usepackage{color}
+\usepackage{unicode-math} % for XeLaTeX & LuaLaTex; bmやboldsymbolは使えない
+\usepackage{listings}
+
+%\usepackage[subrefformat=parens]{subcaption} % subcaption
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% customized commands
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%\renewcommand{\thefootnote}{\arabic{footnote}} % 脚注を数字のみに変更
+\newcommand{\putnote}[1]{\par {\scriptsize #1 \par}}
+\renewcommand{\emph}[1]{\textbf{#1}} % overwrite \emph
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% new environments
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% block-like environment without title, with an arbitary width and an arbitrary background color
+% use: \begin{roundbox}[background color]{width of the box} ... \end{roundbox}
+\newenvironment{roundbox}[2][yellow!50]{
+  \setbeamercolor{rdbx}{fg=black,bg=#1}
+  \begin{beamercolorbox}[sep=1em, wd=#2, rounded=True]{rdbx}
+  }{
+  \end{beamercolorbox}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% template modifications
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% use metropolis theme
+\usetheme[
+  block=fill, % ブロックに背景をつける
+  progressbar=foot, % フッターにプログレスバー
+  numbering=fraction, % 合計ページ数を表示
+]{metropolis}
+
+% basic modifications
+%% spacings and marings
+%\addtobeamertemplate{frametitle}{}{\vspace{-0.4ex}} % 見出し下の余白を減らす
+\setbeamersize{text margin left=2em, text margin right=2em}
+%% font size
+\setbeamerfont{frametitle}{size=\Large}
+
+% title page
+%% font size
+% Reduce title size slightly to avoid overfull vbox on the title page
+\setbeamerfont{title}{size=\Large} % was \huge, lowered to avoid overfull
+% Reduce author/institute sizes slightly to help the title page fit
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{date}{size=\normalsize}
+\setbeamerfont{institute}{size=\small}
+
+% section title page
+%% font size
+\setbeamerfont{section title}{size=\huge}
+
+% block environments
+\setbeamertemplate{blocks}[rounded][shadow=false]
+%% font size
+\setbeamerfont{block title}{size=\large}
+\setbeamerfont{block title alerted}{size=\large}
+%% Change alert block colors
+%%% 1- Block title (background and text)
+\setbeamercolor{block title alerted}{fg=mDarkTeal, bg=mLightBrown!45!yellow!45}
+\setbeamercolor{block title example}{fg=magenta!10!black, bg=mLightGreen!70}
+%%% 2- Block body (background)
+\setbeamercolor{block body alerted}{bg=mLightBrown!25}
+\setbeamercolor{block body example}{bg=mLightGreen!15}
+
+% itemize environment
+%\setbeamertemplate{itemize subitem}[triangle] % when using default symbols
+\setbeamertemplate{itemize subitem}{---} % when using custom symbols
+%\setlength{\itemsep}{0ex}
+\setlength{\leftmargini}{1.2em} % first level items
+\setlength{\leftmarginii}{1em} % second level items
+
+% captions
+\setbeamerfont{caption}{size=\small}
+\renewcommand{\figurename}{Fig.} % change the label for a figure caption
+\setlength{\abovecaptionskip}{5pt plus 3pt minus 2pt} % Chosen fairly arbitrarily
+\setlength{\belowcaptionskip}{5pt plus 3pt minus 2pt} % Chosen fairly arbitrarily
+
+% reference
+\setbeamertemplate{bibliography item}[text] % show an id in reference (not an icon)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% at-sign can be used in the following section:
+\makeatletter
+\setlength{\metropolis@titleseparator@linewidth}{2pt} % in title page
+% line width of progress bar at the bottom
+\setlength{\metropolis@progressinheadfoot@linewidth}{3pt}
+% line width of progress bar in section title pages
+%\setlength{\metropolis@progressonsectionpage@linewidth}{2pt}
+
+% section title page
+\setbeamertemplate{section page}{
+  \centering
+  \begin{minipage}{\linewidth}
+    \raggedright
+    \usebeamercolor[fg]{section title}
+    \usebeamerfont{section title}
+    \insertsectionhead\\[-1ex]
+    \usebeamertemplate*{progress bar in section page}
+    \par
+    \ifx\insertsubsectionhead\@empty\else%
+    \usebeamercolor[fg]{subsection title}%
+    \usebeamerfont{subsection title}%
+    \insertsubsectionhead
+    \fi
+  \end{minipage}
+  \par
+  \vspace{\baselineskip}
+}
+\makeatother
+% at-sign cannot be used in the following
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Helper: replay a frame without creating a new PDF destination (avoid duplicate destination warnings)
+% Usage: wrap \againframe with \againframeNoDest{<label>}
+\newcommand{\againframeNoDest}[1]{%
+  % Save current value of \beamer@frameinlist and \beamer@againframe to avoid interfering
+  % Use the internal command that prints a frame without creating a PDF destination.
+  % Approach: temporarily disable the hyperlink anchor creation provided by hyperref
+  \begingroup
+  \let\Hy@raisedlink\relax
+  \againframe{#1}%
+  \endgroup
+}
