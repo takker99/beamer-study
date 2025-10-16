@@ -1,4 +1,11 @@
 {
+  "scripts": {
+    "build": "./build.sh",
+    "build:main": "latexmk -pdf main.tex",
+    "build:presentation": "latexmk -pdf presentation.tex",
+    "clean": "latexmk -C",
+    "lint": "textlint *.tex"
+  },
   "devDependencies": {
     "textlint": "^13.4.0",
     "textlint-filter-rule-comments": "^1.2.2",
