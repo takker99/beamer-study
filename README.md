@@ -35,6 +35,14 @@ beamerの技術検証
 - 各種パッケージ（mybeamer.styを参照）
 
 ### コンパイル
+
+#### 簡単な方法（推奨）
+```bash
+# ビルドスクリプトを使用
+./build.sh
+```
+
+#### 個別にコンパイル
 ```bash
 # main.texのコンパイル
 latexmk -pdf main.tex
