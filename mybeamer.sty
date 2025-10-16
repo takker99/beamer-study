@@ -8,13 +8,39 @@
 % Font configuration: MS Gothic for Japanese, Times New Roman for English
 \usepackage{fontspec}
 
-% Set English fonts to Times New Roman
-\setmainfont{Times New Roman}
-\setsansfont{Times New Roman}
+% Set English fonts to Times New Roman with fallbacks
+\IfFontExistsTF{Times New Roman}{%
+  \setmainfont{Times New Roman}
+  \setsansfont{Times New Roman}
+}{%
+  \IfFontExistsTF{Liberation Serif}{%
+    \setmainfont{Liberation Serif}
+    \setsansfont{Liberation Serif}
+  }{%
+    \setmainfont{TeX Gyre Termes}
+    \setsansfont{TeX Gyre Termes}
+  }%
+}
 
-% Set Japanese fonts to MS Gothic
-\setmainjfont{MS Gothic}
-\setsansjfont{MS Gothic}
+% Set Japanese fonts to MS Gothic with fallbacks
+\IfFontExistsTF{MS Gothic}{%
+  \setmainjfont{MS Gothic}
+  \setsansjfont{MS Gothic}
+}{%
+  \IfFontExistsTF{MS PGothic}{%
+    \setmainjfont{MS PGothic}
+    \setsansjfont{MS PGothic}
+  }{%
+    \IfFontExistsTF{IPAGothic}{%
+      \setmainjfont{IPAGothic}
+      \setsansjfont{IPAGothic}
+    }{%
+      % Fallback to HaranoAji (commonly available in Japanese TeX distributions)
+      \setmainjfont{HaranoAjiGothic-Regular}
+      \setsansjfont{HaranoAjiGothic-Regular}
+    }%
+  }%
+}
 
 \renewcommand{\kanjifamilydefault}{\gtdefault} % 規定をゴシック体に
 
