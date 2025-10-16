@@ -4,17 +4,19 @@
 % basic settings for the use of LuaLaTeX
 \usepackage{luatexja}
 \usepackage[deluxe]{luatexja-preset}
-\renewcommand{\kanjifamilydefault}{\gtdefault} % 規定をゴシック体に
 
-% Font fallback: prefer Fira if available, otherwise fall back to Latin Modern
+% Font configuration: MS Gothic for Japanese, Times New Roman for English
 \usepackage{fontspec}
-\IfFontExistsTF{Fira Sans}{%
-  % If Fira is available, set it as the sans font used by the theme
-  \setsansfont{Fira Sans}
-}{%
-  % Fallback: Latin Modern Sans (bundled with TeX Live)
-  \setsansfont{Latin Modern Sans}
-}
+
+% Set English fonts to Times New Roman
+\setmainfont{Times New Roman}
+\setsansfont{Times New Roman}
+
+% Set Japanese fonts to MS Gothic
+\setmainjfont{MS Gothic}
+\setsansjfont{MS Gothic}
+
+\renewcommand{\kanjifamilydefault}{\gtdefault} % 規定をゴシック体に
 
 % Note: PDF-string handling (
 % Use main.tex to disable \translate inside PDF strings when needed.
@@ -31,6 +33,17 @@
 \usepackage{listings}
 
 %\usepackage[subrefformat=parens]{subcaption} % subcaption
+
+% Bibliography with biblatex
+\usepackage[backend=biber,style=ieee,sorting=none]{biblatex}
+\addbibresource{refs.bib}
+
+% TikZ and pgfplots for graphs
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pgfplotstable}
+\usetikzlibrary{positioning, calc, arrows.meta}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % customized commands
