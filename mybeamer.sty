@@ -114,9 +114,11 @@
 % use metropolis theme
 \usetheme[
   block=fill, % ブロックに背景をつける
-  progressbar=foot, % フッターにプログレスバー
-  numbering=fraction, % 合計ページ数を表示
+  progressbar=foot % フッターにプログレスバー
 ]{metropolis}
+
+% Do not insert section-only pages
+\metroset{sectionpage=none, subsectionpage=none, numbering=none}
 
 % basic modifications
 %% spacings and marings
@@ -124,6 +126,9 @@
 \setbeamersize{text margin left=2em, text margin right=2em}
 %% font size
 \setbeamerfont{frametitle}{size=\Large}
+% Enforce minimum body font size = 24pt for normal text
+% Keep specialized sizes (e.g., axis labels with \small) intact
+\setbeamerfont{normal text}{size*={24pt}{28pt}}
 
 % title page
 %% font size
@@ -177,24 +182,9 @@
 %\setlength{\metropolis@progressonsectionpage@linewidth}{2pt}
 
 % section title page
-\setbeamertemplate{section page}{
-  \centering
-  \begin{minipage}{\linewidth}
-    \raggedright
-    \usebeamercolor[fg]{section title}
-    \usebeamerfont{section title}
-    \insertsectionhead\\[-1ex]
-    \usebeamertemplate*{progress bar in section page}
-    \par
-    \ifx\insertsubsectionhead\@empty\else%
-    \usebeamercolor[fg]{subsection title}%
-    \usebeamerfont{subsection title}%
-    \insertsubsectionhead
-    \fi
-  \end{minipage}
-  \par
-  \vspace{\baselineskip}
-}
+% Note: Section pages disabled via \metroset above; keep template defined but unused.
+\setbeamertemplate{section page}{\relax}
+\setbeamertemplate{subsection page}{\relax}
 \makeatother
 % at-sign cannot be used in the following
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -209,4 +199,14 @@
   \let\Hy@raisedlink\relax
   \againframe{#1}%
   \endgroup
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Frame numbering at top-right
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Show "current/total" at the top-right corner on every frame (incl. title/plain)
+\addtobeamertemplate{background canvas}{}{
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east] at ([xshift=-0.6em,yshift=-0.6em]current page.north east) {\insertframenumber{} / \inserttotalframenumber};
+  \end{tikzpicture}%
 }
