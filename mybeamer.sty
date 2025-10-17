@@ -2,45 +2,47 @@
 % packages
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % basic settings for the use of LuaLaTeX
-\usepackage{luatexja}
-\usepackage[deluxe]{luatexja-preset}
-
-% Font configuration: MS Gothic for Japanese, Times New Roman for English
-\usepackage{fontspec}
+\usepackage{luatexja-fontspec}
 
 % Set English fonts to Times New Roman with fallbacks
 \IfFontExistsTF{Times New Roman}{%
-  \setmainfont{Times New Roman}
+  \setmainfont[Ligatures={Rare,TeX}]{Times New Roman}
   \setsansfont{Times New Roman}
 }{%
   \IfFontExistsTF{Liberation Serif}{%
-    \setmainfont{Liberation Serif}
+    \setmainfont[Ligatures={Rare,TeX}]{Liberation Serif}
     \setsansfont{Liberation Serif}
   }{%
-    \setmainfont{TeX Gyre Termes}
+    \setmainfont[Ligatures={Rare,TeX}]{TeX Gyre Termes}
     \setsansfont{TeX Gyre Termes}
   }%
 }
 
 % Set Japanese fonts to MS Gothic with fallbacks
 \IfFontExistsTF{MS Gothic}{%
-  \setmainjfont{MS Gothic}
-  \setsansjfont{MS Gothic}
+  \setmainjfont[
+    BoldFont           = MS-Gothic,
+    BoldFeatures       = {FakeBold=2},
+    ItalicFont         = MS-Mincho,
+    ItalicFeatures     = {FakeSlant=0.33},
+    BoldItalicFont     = MS-Gothic,
+    BoldItalicFeatures = {FakeBold=2, FakeSlant=0.33}
+  ]{MS-Mincho}
+  \setsansjfont[
+    BoldFont           = MS-Gothic,
+    BoldFeatures       = {FakeBold=2},
+    ItalicFont         = MS-Gothic,
+    ItalicFeatures     = {FakeSlant=0.33},
+    BoldItalicFont     = MS-Gothic,
+    BoldItalicFeatures = {FakeBold=2, FakeSlant=0.33}
+  ]{MS-Gothic}
 }{%
-  \IfFontExistsTF{MS PGothic}{%
-    \setmainjfont{MS PGothic}
-    \setsansjfont{MS PGothic}
-  }{%
-    \IfFontExistsTF{IPAGothic}{%
-      \setmainjfont{IPAGothic}
-      \setsansjfont{IPAGothic}
-    }{%
-      % Fallback to HaranoAji (commonly available in Japanese TeX distributions)
-      \setmainjfont{HaranoAjiGothic-Regular}
-      \setsansjfont{HaranoAjiGothic-Regular}
-    }%
-  }%
+  \setmainjfont{IPAGothic}
+  \setsansjfont{IPAGothic}
 }
+
+% % Font configuration: MS Gothic for Japanese, Times New Roman for English
+% \usepackage{fontspec}
 
 \renewcommand{\kanjifamilydefault}{\gtdefault} % 規定をゴシック体に
 
@@ -53,16 +55,32 @@
 \usepackage{comment} % 複数行をコメントアウトする
 \usepackage{url}
 \usepackage{array, booktabs, multirow, makecell} % tabular関連
+\usepackage[version=4]{mhchem} % chemical formulas
 %\usepackage{romannum} % ローマ数字
 \usepackage{color}
 \usepackage{unicode-math} % for XeLaTeX & LuaLaTex; bmやboldsymbolは使えない
 \usepackage{listings}
+\usepackage{etoolbox} % for conditional commands
 
 %\usepackage[subrefformat=parens]{subcaption} % subcaption
 
 % Bibliography with biblatex
 \usepackage[backend=biber,style=ieee,sorting=none]{biblatex}
 \addbibresource{refs.bib}
+
+% Track if any citations have been made
+\newbool{hascitations}
+\AtEveryCitekey{\global\booltrue{hascitations}}
+
+% Custom command to print bibliography only if there are citations
+\newcommand{\printbibliographyframe}{%
+  \ifbool{hascitations}{%
+    \begin{frame}[allowframebreaks]
+      \frametitle{参考文献}
+      \bibbysection[heading=none]
+    \end{frame}%
+  }{}%
+}
 
 % TikZ and pgfplots for graphs
 \usepackage{tikz}

@@ -8,7 +8,7 @@
 3. コンテナが起動するまで待つ（初回は数分かかる場合があります）
 
 ### ローカル環境を使用する場合
-必要なもの:
+必要なもの：
 - TexLive（完全版推奨）
 - LuaLaTeX
 - latexmk
@@ -31,26 +31,26 @@ latexmk -pdf presentation.tex
 ```
 
 ## 3. 出力の確認
-生成されたPDFは `dist/` ディレクトリにあります:
+生成されたPDFは `dist/` ディレクトリにあります：
 - `dist/main.pdf` - サンプルスライド
 - `dist/presentation.pdf` - 博士論文発表スライド
 
 ## 4. スライドのカスタマイズ
 
 ### フォントの変更
-`mybeamer.sty` を編集してフォント設定を変更できます。
+`mybeamer.sty` を編集してフォント設定を変更できます．
 
-現在の設定:
-- 日本語: MS Gothic（フォールバック有り）
-- 英語: Times New Roman（フォールバック有り）
+現在の設定：
+- 日本語： MS Gothic（フォールバック有り）
+- 英語： Times New Roman（フォールバック有り）
 
 ### データの更新
-グラフのデータを変更する場合:
+グラフのデータを変更する場合：
 1. `data/` ディレクトリのCSVファイルを編集
 2. 再度ビルドするだけで自動的にグラフが更新されます
 
 ### スライドの追加
-`presentation.tex` に新しい `\begin{frame}...\end{frame}` を追加:
+`presentation.tex` に新しい `\begin{frame}...\end{frame}` を追加：
 
 ```latex
 \begin{frame}
@@ -60,7 +60,7 @@ latexmk -pdf presentation.tex
 ```
 
 ### 画像の追加
-画像は `figs/` ディレクトリに配置:
+画像は `figs/` ディレクトリに配置：
 
 ```latex
 \includegraphics[width=0.5\linewidth]{figs/your_image.jpg}
@@ -69,16 +69,16 @@ latexmk -pdf presentation.tex
 ## 5. よくある質問
 
 ### Q: ビルドが遅い
-A: 初回のビルドは時間がかかります。2回目以降は変更があったファイルのみ処理されるため高速です。
+A: 初回のビルドは時間がかかります．2回目以降は変更があったファイルのみ処理されるため高速です．
 
 ### Q: フォントエラーが出る
-A: MS GothicやTimes New Romanがシステムにない場合、自動的に代替フォントが使用されます。エラーが続く場合は `mybeamer.sty` のフォント設定を確認してください。
+A: MS GothicやTimes New Romanがシステムにない場合，自動的に代替フォントが使用されます．エラーが続く場合は `mybeamer.sty` のフォント設定を確認してください．
 
 ### Q: グラフが表示されない
-A: CSVファイルのパスが正しいか確認してください。また、TikZ/pgfplotsパッケージがインストールされているか確認してください。
+A: CSVファイルのパスが正しいか確認してください．また，TikZ/pgfplotsパッケージがインストールされているか確認してください．
 
 ### Q: 文献が表示されない
-A: 以下を確認:
+A: 以下を確認：
 1. `refs.bib` に文献情報が記載されているか
 2. `\cite{key}` で文献を引用しているか
 3. biberが正しく実行されているか（latexmkが自動的に実行します）
@@ -112,11 +112,11 @@ latexmk -C
 - `presentation.tex` - 研究発表スライドの実例
 
 ### Beamerの使い方
-- 公式ドキュメント: https://ctan.org/pkg/beamer
-- Metropolisテーマ: https://github.com/matze/mtheme
+- 公式ドキュメント： https://ctan.org/pkg/beamer
+- Metropolisテーマ： https://github.com/matze/mtheme
 
 ### TikZ/pgfplots
-- pgfplots ドキュメント: https://ctan.org/pkg/pgfplots
+- pgfplotsドキュメント： https://ctan.org/pkg/pgfplots
 - TikZ examples: https://texample.net/tikz/
 
 ## まとめ
