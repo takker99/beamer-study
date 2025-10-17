@@ -6,12 +6,6 @@ set -e
 echo "Building Beamer presentations..."
 echo ""
 
-# Build main.tex
-echo "Building main.tex..."
-latexmk -pdf main.tex
-echo "✓ main.tex built successfully"
-echo ""
-
 # Build presentation.tex
 echo "Building presentation.tex..."
 latexmk -pdf presentation.tex
