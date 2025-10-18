@@ -12,13 +12,14 @@
 			]
 		}
 	},
-	"image": "texlive/texlive:latest",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
 	"features": {
-		"ghcr.io/devcontainers/features/github-cli:1": {
-			"version": "latest"
-		},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers/features/rust:1": {},
-		"ghcr.io/devcontainers/features/node:1": {}
+		"ghcr.io/devcontainers/features/node:1": {},
+		"ghcr.io/prulloac/devcontainer-features/latex:1": {
+			"packages": "appendixnumberbeamer beamertheme-metropolis biber biblatex biblatex-ieee booktabs chktex comment extsizes haranoaji ipaex jlreq lacheck latexmk listings lualatex-math luatexja makecell mhchem multirow newtx oberdiek pgfplotsthemebeamer  physics siunitx tex-gyre unicode-math xkeyval"
+		}
 	},
 	// see https://github.com/devcontainers/features/tree/main/src/node#using-nvm-from-postcreatecommand-or-another-lifecycle-command
 	"postCreateCommand": ". ${NVM_DIR}/nvm.sh && nvm install --lts && pnpm i && cargo install tex-fmt"
