@@ -2,19 +2,49 @@
 % packages
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % basic settings for the use of LuaLaTeX
-\usepackage{luatexja}
-\usepackage[deluxe]{luatexja-preset}
-\renewcommand{\kanjifamilydefault}{\gtdefault} % 規定をゴシック体に
+\usepackage{luatexja-fontspec}
 
-% Font fallback: prefer Fira if available, otherwise fall back to Latin Modern
-\usepackage{fontspec}
-\IfFontExistsTF{Fira Sans}{%
-  % If Fira is available, set it as the sans font used by the theme
-  \setsansfont{Fira Sans}
+% Set English fonts to Times New Roman with fallbacks
+\IfFontExistsTF{Times New Roman}{%
+  \setmainfont[Ligatures={Rare,TeX}]{Times New Roman}
+  \setsansfont{Times New Roman}
 }{%
-  % Fallback: Latin Modern Sans (bundled with TeX Live)
-  \setsansfont{Latin Modern Sans}
+  \IfFontExistsTF{Liberation Serif}{%
+    \setmainfont[Ligatures={Rare,TeX}]{Liberation Serif}
+    \setsansfont{Liberation Serif}
+  }{%
+    \setmainfont[Ligatures={Rare,TeX}]{TeX Gyre Termes}
+    \setsansfont{TeX Gyre Termes}
+  }%
 }
+
+% Set Japanese fonts to MS Gothic with fallbacks
+\IfFontExistsTF{MS Gothic}{%
+  \setmainjfont[
+    BoldFont           = MS-Gothic,
+    BoldFeatures       = {FakeBold=2},
+    ItalicFont         = MS-Mincho,
+    ItalicFeatures     = {FakeSlant=0.33},
+    BoldItalicFont     = MS-Gothic,
+    BoldItalicFeatures = {FakeBold=2, FakeSlant=0.33}
+  ]{MS-Mincho}
+  \setsansjfont[
+    BoldFont           = MS-Gothic,
+    BoldFeatures       = {FakeBold=2},
+    ItalicFont         = MS-Gothic,
+    ItalicFeatures     = {FakeSlant=0.33},
+    BoldItalicFont     = MS-Gothic,
+    BoldItalicFeatures = {FakeBold=2, FakeSlant=0.33}
+  ]{MS-Gothic}
+}{%
+  \setmainjfont{IPAGothic}
+  \setsansjfont{IPAGothic}
+}
+
+% % Font configuration: MS Gothic for Japanese, Times New Roman for English
+% \usepackage{fontspec}
+
+\renewcommand{\kanjifamilydefault}{\gtdefault} % 規定をゴシック体に
 
 % Note: PDF-string handling (
 % Use main.tex to disable \translate inside PDF strings when needed.
@@ -25,12 +55,39 @@
 \usepackage{comment} % 複数行をコメントアウトする
 \usepackage{url}
 \usepackage{array, booktabs, multirow, makecell} % tabular関連
+\usepackage[version=4]{mhchem} % chemical formulas
 %\usepackage{romannum} % ローマ数字
 \usepackage{color}
 \usepackage{unicode-math} % for XeLaTeX & LuaLaTex; bmやboldsymbolは使えない
 \usepackage{listings}
+\usepackage{etoolbox} % for conditional commands
 
 %\usepackage[subrefformat=parens]{subcaption} % subcaption
+
+% Bibliography with biblatex
+\usepackage[backend=biber,style=ieee,sorting=none]{biblatex}
+\addbibresource{refs.bib}
+
+% Track if any citations have been made
+\newbool{hascitations}
+\AtEveryCitekey{\global\booltrue{hascitations}}
+
+% Custom command to print bibliography only if there are citations
+\newcommand{\printbibliographyframe}{%
+  \ifbool{hascitations}{%
+    \begin{frame}[allowframebreaks]
+      \frametitle{参考文献}
+      \bibbysection[heading=none]
+    \end{frame}%
+  }{}%
+}
+
+% TikZ and pgfplots for graphs
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pgfplotstable}
+\usetikzlibrary{positioning, calc, arrows.meta}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % customized commands
@@ -57,9 +114,11 @@
 % use metropolis theme
 \usetheme[
   block=fill, % ブロックに背景をつける
-  progressbar=foot, % フッターにプログレスバー
-  numbering=fraction, % 合計ページ数を表示
+  progressbar=foot % フッターにプログレスバー
 ]{metropolis}
+
+% Do not insert section-only pages
+\metroset{sectionpage=none, subsectionpage=none, numbering=none}
 
 % basic modifications
 %% spacings and marings
@@ -67,6 +126,9 @@
 \setbeamersize{text margin left=2em, text margin right=2em}
 %% font size
 \setbeamerfont{frametitle}{size=\Large}
+% Enforce minimum body font size = 24pt for normal text
+% Keep specialized sizes (e.g., axis labels with \small) intact
+\setbeamerfont{normal text}{size*={24pt}{28pt}}
 
 % title page
 %% font size
@@ -120,24 +182,9 @@
 %\setlength{\metropolis@progressonsectionpage@linewidth}{2pt}
 
 % section title page
-\setbeamertemplate{section page}{
-  \centering
-  \begin{minipage}{\linewidth}
-    \raggedright
-    \usebeamercolor[fg]{section title}
-    \usebeamerfont{section title}
-    \insertsectionhead\\[-1ex]
-    \usebeamertemplate*{progress bar in section page}
-    \par
-    \ifx\insertsubsectionhead\@empty\else%
-    \usebeamercolor[fg]{subsection title}%
-    \usebeamerfont{subsection title}%
-    \insertsubsectionhead
-    \fi
-  \end{minipage}
-  \par
-  \vspace{\baselineskip}
-}
+% Note: Section pages disabled via \metroset above; keep template defined but unused.
+\setbeamertemplate{section page}{\relax}
+\setbeamertemplate{subsection page}{\relax}
 \makeatother
 % at-sign cannot be used in the following
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -152,4 +199,14 @@
   \let\Hy@raisedlink\relax
   \againframe{#1}%
   \endgroup
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Frame numbering at top-right
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Show "current/total" at the top-right corner on every frame (incl. title/plain)
+\addtobeamertemplate{background canvas}{}{
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east] at ([xshift=-0.6em,yshift=-0.6em]current page.north east) {\insertframenumber{} / \inserttotalframenumber};
+  \end{tikzpicture}%
 }

@@ -1,0 +1,7 @@
+curing_days,unconfined_strength_control,unconfined_strength_slag5,unconfined_strength_slag10,unconfined_strength_slag15
+0,45,48,52,58
+7,120,165,210,245
+14,180,245,310,365
+28,250,350,455,520
+56,310,425,550,625
+91,350,480,610,685
